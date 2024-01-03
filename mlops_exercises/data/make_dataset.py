@@ -28,17 +28,20 @@ def process_data(train=True):
     os.makedirs("data/processed/corruptmnist", exist_ok=True)
 
     if train:
-        images_list = [f"train_images_{i}.pt" for i in range(6)]
-        labels_list = [f"train_target_{i}.pt" for i in range(6)]
+        images_list = [f"train_images_{i}.pt" for i in range(10)]
+        labels_list = [f"train_target_{i}.pt" for i in range(10)]
     else:
         images_list = [f"test_images.pt"]
         labels_list = [f"test_target.pt"]
 
     # handle images
     images = torch.empty(0, 28, 28)
-    for image_path in images_list:
+    for i, image_path in enumerate(images_list):
         # load the tensor
-        images = torch.cat((images, torch.load(os.path.join(folder, image_path))), dim=0)
+        if ((i>=6) and train):        
+            images = torch.cat((images, torch.load(os.path.join(folder+"_v2", image_path))), dim=0)
+        else:
+            images = torch.cat((images, torch.load(os.path.join(folder, image_path))), dim=0)
 
     # normalize the tensor
     normalise = transforms.Normalize(mean=images.mean(dim=(1, 2)), std=images.std(dim=(1, 2)))
@@ -49,9 +52,12 @@ def process_data(train=True):
 
     # handle labels
     labels = torch.empty(0)
-    for label_path in labels_list:
+    for i, label_path in enumerate(labels_list):
         # load the tensor
-        labels = torch.cat((labels, torch.load(os.path.join(folder, label_path))))
+        if ((i>=6) and train):        
+            labels = torch.cat((labels, torch.load(os.path.join(folder+"_v2", label_path))))
+        else:
+            labels = torch.cat((labels, torch.load(os.path.join(folder, label_path))))
 
     # save the tensor to the data/processed folder
     torch.save(labels, os.path.join("data/processed/corruptmnist", "train_target.pt" if train else "test_target.pt"))
