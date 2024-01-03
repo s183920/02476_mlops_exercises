@@ -24,6 +24,7 @@ def cli():
 def train(lr, epochs):
     """Train a model on MNIST."""
     print("Training day and night")
+    print("Device: ", DEVICE)
     print("Learning rate: ", lr)
     print("Epochs: ", epochs)
 
