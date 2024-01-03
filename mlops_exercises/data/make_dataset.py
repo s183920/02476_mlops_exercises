@@ -1,0 +1,48 @@
+# When this file runs, it should take the raw data e.g. the corrupted MNIST files from yesterday 
+# which now should be located in a data/raw folder and process them into a single tensor, normalize 
+# the tensor and save this intermediate representation to the data/processed folder. By normalization here 
+# we refer to making sure the images have mean 0 and standard deviation 1.
+
+import torch
+from torchvision import datasets, transforms
+import os
+
+def process_data(train = True):
+    # setup folders
+    folder = "data/raw/corruptmnist"
+    os.makedirs("data/processed/corruptmnist", exist_ok = True)
+    
+    if train:
+        images_list = [f'train_images_{i}.pt' for i in range(6)]
+        labels_list = [f'train_target_{i}.pt' for i in range(6)]
+    else:
+        images_list = [f'test_images.pt']
+        labels_list = [f'test_target.pt']
+    
+    # handle images
+    images = torch.empty(0, 28, 28)
+    for image_path in images_list:
+        # load the tensor
+        images = torch.cat((images, torch.load(os.path.join(folder, image_path))), dim = 0)
+        
+    # normalize the tensor
+    normalise = transforms.Normalize(mean = images.mean(dim = (1,2)), std = images.std(dim = (1,2)))
+    images = normalise(images)
+        
+    # save the tensor to the data/processed folder
+    torch.save(images, os.path.join("data/processed/corruptmnist", "train_images.pt" if train else "test_images.pt"))
+        
+    # handle labels
+    labels = torch.empty(0)
+    for label_path in labels_list:
+        # load the tensor
+        labels = torch.cat((labels, torch.load(os.path.join(folder, label_path))))
+        
+    # save the tensor to the data/processed folder
+    torch.save(labels, os.path.join("data/processed/corruptmnist", "train_target.pt" if train else "test_target.pt"))
+
+if __name__ == '__main__':
+    # Get the data and process it
+    
+    process_data(train = True)
+    process_data(train = False)

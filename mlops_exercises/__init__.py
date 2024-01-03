@@ -1,0 +1,2 @@
+from mlops_exercises.models.model import MyNeuralNet
+from mlops_exercises.predict_model import predict
