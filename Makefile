@@ -41,8 +41,15 @@ data: requirements
 	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/data/make_dataset.py
 
 ## Train model
+train: lr = 0.001
+train: epochs = 25
 train:
-	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/train_model.py train
+	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/train_model.py train --lr $(lr) --epochs $(epochs)
+
+## Evaluate model
+evaluate: test = "wow"
+evaluate:
+	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/train_model.py evaluate models/trained_model.pt --test $(test)
 
 #################################################################################
 # Documentation RULES                                                           #
