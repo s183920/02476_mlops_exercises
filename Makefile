@@ -25,7 +25,7 @@ requirements:
 requirements_docker:
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel --no-cache-dir
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt --no-cache-dir
-	$(PYTHON_INTERPRETER) -m pip install . --no-cache-dir
+	$(PYTHON_INTERPRETER) -m pip install -e . --no-cache-dir
 
 ## Install Developer Python Dependencies
 dev_requirements: requirements

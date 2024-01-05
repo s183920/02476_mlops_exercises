@@ -2,6 +2,8 @@ import click
 import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
+import os
+from datetime import datetime as dt
 
 from mlops_exercises.models.model import MyAwesomeModel
 
@@ -12,15 +14,15 @@ from mlops_exercises.data.data import mnist
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-@click.group()
-def cli():
-    """Command line interface."""
-    pass
+# @click.group()
+# def cli():
+#     """Command line interface."""
+#     pass
 
 
-@click.command()
-@click.option("--lr", default=1e-3, help="learning rate to use for training")
-@click.option("--epochs", default=25, help="number of epochs to train for")
+# @click.command()
+# @click.option("--lr", default=1e-3, help="learning rate to use for training")
+# @click.option("--epochs", default=25, help="number of epochs to train for")
 def train(lr, epochs):
     """Train a model on MNIST."""
     print("Training day and night")
@@ -60,18 +62,21 @@ def train(lr, epochs):
         print("Epoch {}: \t train loss: {} \t accuracy: {}".format(epoch, losses[epoch], num_correct / num_data))
 
     # save model
-    torch.save(model, "models/trained_model.pt")
+    os.makedirs("models", exist_ok=True)
+    torch.save(model, f"models/trained_model_{dt.now().strftime('%y%m%d_%H%M%S')}.pt")
 
     # plot loss
     fig, ax = plt.subplots()
     ax.plot(losses)
     ax.set(xlabel="Epoch", ylabel="Loss", title="Training Loss")
+    
+    os.makedirs("reports/figures", exist_ok=True)
     plt.savefig("reports/figures/loss.png")
     plt.show()
 
 
-@click.command()
-@click.argument("model_checkpoint")
+# @click.command()
+# @click.argument("model_checkpoint")
 def evaluate(model_checkpoint):
     """Evaluate a trained model."""
     print("Evaluating like my life dependends on it")
@@ -95,9 +100,9 @@ def evaluate(model_checkpoint):
     print("Test accuracy: {}".format(num_correct / num_data))
 
 
-cli.add_command(train)
-cli.add_command(evaluate)
+# cli.add_command(train)
+# cli.add_command(evaluate)
 
 
-if __name__ == "__main__":
-    cli()
+# if __name__ == "__main__":
+#     cli()

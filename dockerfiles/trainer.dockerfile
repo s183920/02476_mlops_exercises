@@ -1,5 +1,6 @@
 # Base image
 FROM python:3.11-slim
+# FROM  nvcr.io/nvidia/pytorch:22.07-py3
 
 # install python
 RUN apt update && \
@@ -16,7 +17,6 @@ COPY Makefile Makefile
 # install dependencies
 WORKDIR /
 RUN make requirements_docker
-RUN pip install -e . --no-cache-dir
 
 # run training
 ENTRYPOINT ["python", "-u", "mlops_exercises/train_model.py", "train", "--epochs=3"]

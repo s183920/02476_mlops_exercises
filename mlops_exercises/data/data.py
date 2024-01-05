@@ -7,7 +7,7 @@ from torchvision import transforms
 
 class CorruptedMNIST(torch.utils.data.Dataset):
     def __init__(self, train=True):
-        self.folder = "data/processed/corruptmnist"
+        self.folder = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed", "corruptmnist")
         # self.images_list = glob.glob(f'{folder}/{"train" if train else "test"}_images**.pt', recursive = True)
         # self.labels_list = glob.glob(os.path.join(folder, f'{"train" if train else "test"}_target*.pt'), recursive = True)
         # if train:
@@ -17,7 +17,9 @@ class CorruptedMNIST(torch.utils.data.Dataset):
         #     self.images_list = [os.path.join(folder, f'test_images.pt')]
         #     self.labels_list = [os.path.join(folder, f'test_target.pt')]
         # print("Found {} images and {} labels".format(len(self.images_list), len(self.labels_list)))
-
+        print(os.getcwd())
+        print(os.path.join(os.path.dirname(__file__)))
+        
         if train:
             self.images = torch.load(os.path.join(self.folder, "train_images.pt"))
             self.labels = torch.load(os.path.join(self.folder, "train_target.pt"))

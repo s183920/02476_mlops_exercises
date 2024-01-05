@@ -1,0 +1,5 @@
+mode: train
+
+params:
+  lr: 0.001
+  epochs: 3
