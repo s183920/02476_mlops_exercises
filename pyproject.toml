@@ -27,3 +27,8 @@ dev = {file = ['requirements_dev.txt']}
 line-length = 120
 select = ["I"]
 
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    ]
