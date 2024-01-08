@@ -1,9 +1,10 @@
+import os
+from datetime import datetime as dt
+
 import click
 import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
-import os
-from datetime import datetime as dt
 
 from mlops_exercises.models.model import MyAwesomeModel
 

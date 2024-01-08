@@ -1,7 +1,9 @@
-from tests import _PATH_DATA
-from mlops_exercises.data.data import mnist
-import pytest
 import os
+
+import pytest
+
+from mlops_exercises.data.data import mnist
+from tests import _PATH_DATA
 
 
 @pytest.mark.skipif(not os.path.exists(os.path.join(_PATH_DATA, "processed", "corruptmnist")), reason="Data files not found")

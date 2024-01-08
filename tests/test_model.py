@@ -1,7 +1,9 @@
-from tests import _PATH_DATA, _PROJECT_ROOT
-import torch
 import os
+
 import pytest
+import torch
+
+from tests import _PATH_DATA, _PROJECT_ROOT
 
 MODEL_PATH = os.path.join(_PROJECT_ROOT, "models", "trained_model.pt")
 
