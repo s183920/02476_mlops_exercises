@@ -57,7 +57,5 @@ jobs:
     - name: type check with mypy
       run: |
         pip install mypy
-        mypy .
+        mypy --strict --output-format=github mlops_exercises/
       continue-on-error: true
-
-
