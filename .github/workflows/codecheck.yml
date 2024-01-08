@@ -1,4 +1,4 @@
-name: "Run tests"
+name: "Run code checks"
 
 on:
   push:
@@ -49,7 +49,15 @@ jobs:
     - name: lint with ruff
       run: |
         pip install ruff
+        ruff check --output-format=github .
+        ruff format .
         ruff --output-format=github .
+      continue-on-error: true
+
+    - name: type check with mypy
+      run: |
+        pip install mypy
+        mypy .
       continue-on-error: true
 
 

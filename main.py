@@ -1,6 +1,8 @@
+import logging
+
 import hydra
 from omegaconf import OmegaConf
-import logging
+
 log = logging.getLogger(__name__)
 
 
