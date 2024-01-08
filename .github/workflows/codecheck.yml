@@ -59,5 +59,3 @@ jobs:
         pip install mypy
         mypy --strict --output-format=github mlops_exercises/
       continue-on-error: true
-
-
