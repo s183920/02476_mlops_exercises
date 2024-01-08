@@ -73,6 +73,8 @@ def train(lr, epochs):
     os.makedirs("reports/figures", exist_ok=True)
     plt.savefig("reports/figures/loss.png")
     plt.show()
+    
+    return losses
 
 
 # @click.command()

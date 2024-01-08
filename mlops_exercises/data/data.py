@@ -41,7 +41,7 @@ class CorruptedMNIST(torch.utils.data.Dataset):
         return self.images[idx], self.labels[idx].long()
 
 
-def mnist():
+def mnist(batch_size=5000):
     """Return train and test dataloaders for MNIST."""
     # exchange with the corrupted mnist dataset
     # train = torch.randn(50000, 784)
@@ -49,13 +49,13 @@ def mnist():
     # return train, test
 
     # mnist_path = os.path.join('data', 'corruptmnist')
-    mnist_path = os.path.join("data", "processed", "corruptmnist")
+    # mnist_path = os.path.join("data", "processed", "corruptmnist")
 
     train_set = CorruptedMNIST(train=True)
-    train_loader = torch.utils.data.DataLoader(train_set, batch_size=5000)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
 
     test_set = CorruptedMNIST(train=False)
-    test_loader = torch.utils.data.DataLoader(test_set, batch_size=5000)
+    test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size)
 
     return train_loader, test_loader
 
