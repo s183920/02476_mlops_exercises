@@ -54,4 +54,10 @@ jobs:
         ruff --output-format=github .
       continue-on-error: true
 
+    - name: type check with mypy
+      run: |
+        pip install mypy
+        mypy .
+      continue-on-error: true
+
 
