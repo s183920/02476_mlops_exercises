@@ -27,6 +27,10 @@ requirements_docker:
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt --no-cache-dir
 	$(PYTHON_INTERPRETER) -m pip install -e . --no-cache-dir
 
+requirements_vm:
+	curl https://raw.githubusercontent.com/GoogleCloudPlatform/compute-gpu-installation/main/linux/install_gpu_driver.py --output install_gpu_driver.py
+	sudo $(PYTHON_INTERPRETER) install_gpu_driver.py
+
 ## Install Developer Python Dependencies
 dev_requirements: requirements
 	$(PYTHON_INTERPRETER) -m pip install .["dev"]
@@ -72,6 +76,45 @@ create_vm:
 		--image-family=$(image_family) \
 		--image-project=$(IMAGE_PROJECT) \
 
+## Create GCP VM with GPU
+create_gpu_vm: name = mlops-exercises-gpu
+create_gpu_vm:
+	gcloud compute instances create $(name) \
+		--zone europe-west1-b \
+		--image-family=pytorch-latest-gpu \
+		--image-project=deeplearning-platform-release \
+		--accelerator="type=nvidia-tesla-v100,count=1" \
+		--metadata="install-nvidia-driver=True" \
+		--maintenance-policy TERMINATE
+
+## Create VM from image
+create_vm_from_image: name = mlops-exercises-image
+create_vm_from_image: zone = europe-west1-b
+create_vm_from_image: project_id = silken-campus-410716
+create_vm_from_image:
+	docker build -f dockerfiles/gcp_vm_tester.dockerfile . -t gcp_vm_tester:latest
+	docker tag gcp_vm_tester gcr.io/$(project_id)/gcp_vm_tester
+	docker push gcr.io/$(project_id)/gcp_vm_tester
+
+	gcloud compute instances create-with-container $(name) \
+		--container-image=gcr.io/$(project_id)/gcp_vm_tester \
+		--zone $(zone) \
+
+## Pull testing image created in GCP VM
+pull_test_image: project_id = silken-campus-410716
+pull_test_image: image_name = testing
+pull_test_image: image_tag = latest
+pull_test_image:
+	docker pull gcr.io/$(project_id)/$(image_name):$(image_tag)
+
+
+## Vertex AI Training
+vertex_ai:
+	gcloud ai custom-jobs create \
+		--region=europe-west1 \
+		--display-name=test-run \
+		--config=configs/config_cpu.yaml
+
 #################################################################################
 # Documentation RULES                                                           #
 #################################################################################
@@ -83,6 +126,9 @@ build_documentation: dev_requirements
 ## Serve documentation
 serve_documentation: dev_requirements
 	mkdocs serve --config-file docs/mkdocs.yaml
+
+
+
 
 #################################################################################
 # Self Documenting Commands                                                     #
