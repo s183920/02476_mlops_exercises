@@ -56,6 +56,22 @@ evaluate: test = "wow"
 evaluate:
 	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/train_model.py evaluate models/trained_model.pt --test $(test)
 
+
+#################################################################################
+# VM RULES                                                                      #
+#################################################################################
+
+## Create GCP VM
+create_vm: name = mlops-exercises
+create_vm: zone = europe-west1-b
+create_vm: image_family = pytorch-latest-gpu-debian-11-py310
+create_vm: IMAGE_PROJECT = deeplearning-platform-release
+create_vm:
+	gcloud compute instances create $(name) \
+		--zone=$(zone) \
+		--image-family=$(image_family) \
+		--image-project=$(IMAGE_PROJECT) \
+
 #################################################################################
 # Documentation RULES                                                           #
 #################################################################################
